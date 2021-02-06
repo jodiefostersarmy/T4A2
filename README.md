@@ -20,12 +20,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][https://img.shields.io/github/contributors/jodiefostersarmy/repo.svg?style=for-the-badge]][https://github.com/jodiefostersarmy/repo/graphs/contributors]
-[![Forks][https://img.shields.io/github/forks/jodiefostersarmy/repo.svg?style=for-the-badge]][https://github.com/jodiefostersarmy/repo/network/members]
-[![Stargazers][https://img.shields.io/github/stars/jodiefostersarmy/repo.svg?style=for-the-badge]][https://github.com/jodiefostersarmy/repo/stargazers]
-[![Issues][https://img.shields.io/github/issues/jodiefostersarmy/repo.svg?style=for-the-badge]][https://github.com/jodiefostersarmy/repo/issues]
-[![MIT License][https://img.shields.io/github/license/jodiefostersarmy/repo.svg?style=for-the-badge]][https://github.com/jodiefostersarmy/repo/blob/master/LICENSE.txt]
-[![LinkedIn][https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555]][https://www.linkedin.com/in/anthony-k-a723191aa/]
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -184,15 +184,15 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/jodiefostersarmy/repo.svg?style=for-the-badge
+[contributors-url]: https://github.com/jodiefostersarmy/repo/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/jodiefostersarmy/repo.svg?style=for-the-badge
+[forks-url]: https://github.com/jodiefostersarmy/repo/network/members
+[stars-shield]: https://img.shields.io/github/stars/jodiefostersarmy/repo.svg?style=for-the-badge
+[stars-url]: https://github.com/jodiefostersarmy/repo/stargazers
+[issues-shield]: https://img.shields.io/github/issues/jodiefostersarmy/repo.svg?style=for-the-badge
+[issues-url]: https://github.com/jodiefostersarmy/repo/issues
+[license-shield]: https://img.shields.io/github/license/jodiefostersarmy/repo.svg?style=for-the-badge
+[license-url]: https://github.com/jodiefostersarmy/repo/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/github_username
+[linkedin-url]: https://www.linkedin.com/in/anthony-k-a723191aa/
