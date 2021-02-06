@@ -20,15 +20,13 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-<div align="center>
 
-    [![Contributors][contributors-shield]][contributors-url]
-    [![Forks][forks-shield]][forks-url]
-    [![Stargazers][stars-shield]][stars-url]
-    [![Issues][issues-shield]][issues-url]
-    [![LinkedIn][linkedin-shield]][linkedin-url]
-
-</div>
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 <!-- PROJECT LOGO -->
@@ -194,6 +192,8 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [stars-url]: https://github.com/jodiefostersarmy/T4A2/stargazers
 [issues-shield]: https://img.shields.io/github/issues/jodiefostersarmy/T4A2.svg?style=for-the-badge
 [issues-url]: https://github.com/jodiefostersarmy/T4A2/issues
+[license-shield]: https://img.shields.io/github/license/jodiefostersarmy/T4A2.svg?style=for-the-badge
+[license-url]: https://github.com/jodiefostersarmy/repo/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/anthony-k-a723191aa/
 
