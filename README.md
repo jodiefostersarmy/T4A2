@@ -192,7 +192,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [stars-url]: https://github.com/jodiefostersarmy/T4A2/stargazers
 [issues-shield]: https://img.shields.io/github/issues/jodiefostersarmy/T4A2.svg?style=for-the-badge
 [issues-url]: https://github.com/jodiefostersarmy/T4A2/issues
-[license-shield]: https://img.shields.io/github/license/jodiefostersarmy/T4A2.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/badge/License-MIT-yellow.svg
 [license-url]: https://github.com/jodiefostersarmy/T4A2/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/anthony-k-a723191aa/
