@@ -32,14 +32,14 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/jodiefostersarmy/T4A2">
+    <img src="images/crass.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">project_title</h3>
+  <h3 align="center">T4A2 - Dictionary</h3>
 
   <p align="center">
-    project_description
+    This project is for the last assessment in my Coder Academy CCC bootcamp, as we finish up learning Docker, Kubernetes and Terraform.
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
