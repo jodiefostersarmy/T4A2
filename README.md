@@ -41,7 +41,7 @@
   <p align="center">
     This project is for the last assessment in my Coder Academy CCC bootcamp, as we finish up learning Docker, Kubernetes and Terraform.
     <br />
-    <a href="https://github.com/jodiefostersarmy/T4A2"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/jodiefostersarmy/T4A2/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/jodiefostersarmy/T4A2">View Demo</a>
