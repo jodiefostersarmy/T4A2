@@ -33,7 +33,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/jodiefostersarmy/T4A2">
-    <img src="docs/images/dictionary.jpg" alt="Logo" width="80" height="80">
+    <img src="docs/images/dictionary.jpg" alt="Logo" width="600" height="750">
   </a>
 
   <h3 align="center">T4A2 - Dictionary</h3>
