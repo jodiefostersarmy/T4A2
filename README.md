@@ -39,7 +39,7 @@
   <h3 align="center">T4A2 - Dictionary</h3>
 
   <p align="center">
-    T4A2 is a project borne from the requirement of the last assessment at Australian Institute of Technology's Code, Cloud and Cyber bootcamp course. It is an application that allows the user to look up words via a dictionary API and stores them in a private database. After a set amount of time, the app will text the word to the user's mobile to remind them in hopes of improving their vocabulary. The aim is to expose the user to an evidence-based learning technique called 'Spaced Repetition', that was traditionally performed with flash cards.
+    A dictionary app created as the magnum opus for the Coder Academy CCC course, hopefully utilising as many technologies we have learned about throughout the entire course. This is designed as a learning tool for any and every one, from students to retirees.
     <br />
     <a href="https://github.com/jodiefostersarmy/T4A2/wiki"><strong>Explore the docs »</strong></a>
     <br />
@@ -87,10 +87,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
-
+T4A2 is a project borne from the requirement of the last assessment at Australian Institute of Technology's Code, Cloud and Cyber bootcamp course. It is an application that allows the user to look up words via a dictionary API and stores them in a private database. After a set amount of time, the app will text the word to the user's mobile to remind them in hopes of improving their vocabulary. The aim is to expose the user to an evidence-based learning technique called 'Spaced Repetition', that was traditionally performed with flash cards.
 
 ### Built With
 
