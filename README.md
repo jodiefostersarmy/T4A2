@@ -94,10 +94,17 @@ Here's a blank template to get started:
 
 ### Built With
 
-* []()
-* []()
-* []()
-
+* [Python](https://docs.python.org/3/)
+* [PostgreSQL](https://www.postgresql.org/docs/)
+* [Flask](https://flask.palletsprojects.com/en/1.1.x/) 
+* [Django](https://docs.djangoproject.com/en/3.1/)
+* [Gunicorn](https://docs.gunicorn.org/en/stable/settings.html)
+* [NGINX](https://nginx.org/en/docs/)
+* [Amazon EC2](https://aws.amazon.com/ec2/)
+* [Amazon S3](https://aws.amazon.com/s3/?nc2=type_a)
+* [Amazon EKS](https://aws.amazon.com/eks/)
+* [Amazon VPC](https://aws.amazon.com/vpc/)
+* [Docker](https://docs.docker.com/)
 
 
 <!-- GETTING STARTED -->
@@ -131,7 +138,7 @@ This is an example of how to list things you need to use the software and how to
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the [Documentation](https://github.com/jodiefostersarmy/T4A2/wiki)_
 
 
 
@@ -165,7 +172,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
+Anthony - [@anthonyk](https://twitter.com/anthonyk) - anthony@anthony.com
 
 Project Link: [https://github.com/jodiefostersarmy/T4A2](https://github.com/jodiefostersarmy/T4A2)
 
@@ -174,10 +181,7 @@ Project Link: [https://github.com/jodiefostersarmy/T4A2](https://github.com/jodi
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* []()
-* []()
-* []()
-
+_Coming soon..._
 
 
 
