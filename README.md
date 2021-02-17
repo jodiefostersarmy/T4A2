@@ -12,6 +12,7 @@
   <a href="https://github.com/jodiefostersarmy/T4A2">
     <img src="docs/images/nothing.jpg" alt="Logo">
   </a>
+  <p align="center"> Presents... </p>
 
   <h3 align="center">T4A2 - Dictionary</h3>
 
