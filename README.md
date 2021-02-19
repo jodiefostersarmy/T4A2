@@ -63,7 +63,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Insert image of how the app works]()
+![The Dictionary App](/docs/wireframes/1.png)
 
 T4A2 is a project borne from the requirement of the last assessment at Australian Institute of Technology's Code, Cloud and Cyber bootcamp course. It is an application that allows the user to look up words via a dictionary API and stores them in a private database. After a set amount of time, the app will text the word to the user's mobile to remind them in hopes of improving their vocabulary. The aim is to expose the user to an evidence-based learning technique called 'Spaced Repetition', that was traditionally performed with flash cards.
 
