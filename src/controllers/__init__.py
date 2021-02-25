@@ -6,5 +6,5 @@ from controllers.profile_controller import profiles          # Importing the pro
 
 registerable_controllers = [
     user,
-    profiles
+    words
 ]
