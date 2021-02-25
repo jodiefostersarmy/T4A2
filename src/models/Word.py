@@ -1,5 +1,4 @@
 from main import db                                                                   # This is the db instance created by SQLAlchemy
-# from models.Profile import Profile                                                    # Importing the Profile model
 from sqlalchemy.orm import backref                                                    # Used to make references to other tables
 
 class Word(db.Model):                                                                 # Creating a Users class inheriting from db.Model
