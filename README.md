@@ -120,8 +120,9 @@ _For more examples, please refer to the [Documentation](https://github.com/jodie
 
 ### Endpoint Documentation
 
+The API endpoints are documented below using [swagger.io](https://editor.swagger.io/)(version 2.0), located in the ```API_endpoints.yaml``` file in the ```docs``` folder. This is the root document object for The Dictionary API specification, and can be interactively viewed using the editor to render the OpenAPI specs.
 
-
+- [Raw format](https://github.com/jodiefostersarmy/T4A2/blob/main/docs/API_endpoints.yaml) 
 
 <!-- ROADMAP -->
 ## Roadmap
