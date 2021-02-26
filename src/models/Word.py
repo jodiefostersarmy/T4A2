@@ -1,13 +1,16 @@
-from main import db                                                                   # This is the db instance created by SQLAlchemy
-from sqlalchemy.orm import backref                                                    # Used to make references to other tables
+from main import db
+from sqlalchemy.orm import backref
+from models.SavedWord import SavedWord
 
-class Word(db.Model):                                                                 # Creating a Users class inheriting from db.Model
-    __tablename__= "words"                                                            # Explicitly naming the table "users"
+class Word(db.Model):
+    __tablename__= "words"
 
-    id = db.Column(db.Integer, primary_key=True)                                      # There is an id column and it is the primary key
-    word = db.Column(db.String(), nullable=False, unique=True)                       # Email column, string andit must be unique
-    definition = db.Column(db.String(), nullable=False)                              # The password is a string and must be present
-    pronunciation = db.Column(db.String(), nullable=False)   
+    id = db.Column(db.Integer, primary_key=True)
+    word = db.Column(db.String(), nullable=False, unique=True)
+    definition = db.Column(db.String(), nullable=False)
+    pronunciation = db.Column(db.String(), nullable=False)
 
-    def __repr__(self):                                                               # When printing the model we will see its email attribute
+    #saved_word = db.relationship("SavedWord", backref=backref("word", uselist=False))
+
+    def __repr__(self):
         return f"<Word {self.word}>"

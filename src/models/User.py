@@ -1,16 +1,17 @@
 from main import db                                                                   # This is the db instance created by SQLAlchemy
-from models.Profile import Profile                                                    # Importing the Profile model
 from sqlalchemy.orm import backref                                                    # Used to make references to other tables
+from models.SavedWord import SavedWord
 
 class User(db.Model):                                                                 # Creating a Users class inheriting from db.Model
     __tablename__= "users"                                                            # Explicitly naming the table "users"
 
     id = db.Column(db.Integer, primary_key=True)                                      # There is an id column and it is the primary key
-    email = db.Column(db.String(), nullable=False, unique=True)                       # Email column, string andit must be unique
+    email = db.Column(db.String(), nullable=False, unique=True)                       # Email column, string and it must be unique, not null
     password = db.Column(db.String(), nullable=False)                                 # The password is a string and must be present
-    mobile_number = db.Column(db.Integer(), nullable=False)                                 # The password is a string and must be present
-    join_date = db.Column(db.DateTime(timezone=True), nullable=False)
-    profile = db.relationship("Profile", backref=backref("user", uselist=False))      # Creating the relationship to the profile table
+    mobile_number = db.Column(db.Integer(), nullable=False, unique=True)              # Mobile is an integer, cannot be null and must be unique
+    join_date = db.Column(db.DateTime(timezone=True), nullable=False)                 # The join_date is a datetime and cannot be null
 
-    def __repr__(self):                                                               # When printing the model we will see its email attribute
+    # saved_word = db.relationship("SavedWord", backref=backref("user", uselist=False))
+
+    def __repr__(self):                                                               # When printing the model we will see user email attribute
         return f"<User {self.email}>"
