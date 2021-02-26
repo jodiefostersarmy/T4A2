@@ -2,9 +2,9 @@
 
 
 from controllers.user_controller import user                 # Importing the user blueprint
-from controllers.profile_controller import profiles          # Importing the profile blueprint
+from controllers.word_controller import words
 
 registerable_controllers = [
     user,
-    words
+    words,
 ]

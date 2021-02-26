@@ -16,4 +16,4 @@ class ReminderSchema(ma.SQLAlchemyAutoSchema):
 
 
 reminder_schema = ReminderSchema()
-reminder_schema = ReminderSchema(many=True)
+reminders_schema = ReminderSchema(many=True)

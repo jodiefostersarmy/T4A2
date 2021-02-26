@@ -1,13 +1,14 @@
-from main import db                                                                   # This is the db instance created by SQLAlchemy
-from sqlalchemy.orm import backref                                                    # Used to make references to other tables
+from main import db
+from sqlalchemy.orm import backref   
 
-class FolderWord(db.Model):                                                           # Creating a FolderedWord class inheriting from db.Model
-    __tablename__= "foldered words"                                                   # Explicitly naming the table "foldered words"
+class FolderWord(db.Model):
+    __tablename__= "foldered_words"
 
-    id = db.Column(db.Integer, primary_key=True)                                      # There is an id column and it is the primary key
-    word = db.Column(db.String(), nullable=False, unique=True)                       # Email column, string andit must be unique
-    definition = db.Column(db.String(), nullable=False)                              # The password is a string and must be present
-    pronunciation = db.Column(db.String(), nullable=False)   
+    id = db.Column(db.Integer, primary_key=True)
+    date_added = db.Column(db.DateTime(), nullable=False)
+    
+    word_id = db.Column(db.Integer, db.ForeignKey("words.id"), nullable=False)
+    folder_id = db.Column(db.Integer, db.ForeignKey("folders.id"), nullable=False)
 
-    def __repr__(self):                                                               # When printing the model we will see its email attribute
+    def __repr__(self):
         return f"<Word {self.word}>"

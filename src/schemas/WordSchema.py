@@ -1,15 +1,15 @@
-from main import ma                                                   # Import the serialization object from main
-from models.Word import Word                                          # Importign the Profile model
-from marshmallow.validate import Length                               # Import the length class that will allow us to validate the length of the string 
+from main import ma
+from models.Word import Word
+from marshmallow.validate import Length
 
 
-class WordSchema(ma.SQLAlchemyAutoSchema):                            # Generates Schema automatically
+class WordSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = Word                                                    # Generate Schema using the Word Model
+        model = Word
 
-    word = ma.String(required=True, validate=Length(min=3))            # word is required and the minimum length is 3
-    definition = ma.String(required=True, validate=Length(min=5))      # definition is required and the minimum length is 5
-    pronunciation = ma.String(required=True, validate=Length(min=1))   # pronunciation is required and the minimum length is 1
+    word_self = ma.String(required=True, validate=Length(min=3))
+    definition = ma.String(required=True, validate=Length(min=5))
+    pronunciation = ma.String(required=True, validate=Length(min=1))
 
-word_schema = WordSchema()                                            # Schema for a single word
-words_schema = WordSchema(many=True)                                  # Schema for multiple words
+word_schema = WordSchema()
+words_schema = WordSchema(many=True)

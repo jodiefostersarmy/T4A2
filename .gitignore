@@ -1,4 +1,9 @@
 .DS_Store
 docs/.DS_Store
+__pycache__
 venv
 .env
+models/__pycache__/
+schemas/__pycache__/
+services/__pycache__/
+controllers/__pycache__/
