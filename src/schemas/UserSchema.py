@@ -7,11 +7,12 @@ class UserSchema(ma.SQLAlchemyAutoSchema):                              # Genera
         model = User                                                    # Generate Schema using the User Model
         load_only = ["password"]                                        # This will load the password but it wont send it to the front end
 
+    name = ma.String(required=True)
     email = ma.String(required=True, validate=[Length(min=4), Email()])
     password = ma.String(required=True, validate=Length(min=6))
-    mobile_number = ma.Integer(required=True, validate=Length(min=6, max=20))
-    join_date = ma.DateTime(required=True)
-
+    mobile_number = ma.Integer(required=True)
+    join_date = ma.Integer(required=True)                               # using INTEGER while testing, change to datetime at some point
+    # is_admin = ma.Boolean(required=True)
 
 user_schema = UserSchema()                                              # Schema for a single user
 users_schema = UserSchema(many=True)                                    # Schema for multiple users    

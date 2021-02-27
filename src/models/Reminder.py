@@ -6,8 +6,10 @@ class Reminder(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     word_id = db.Column(db.Integer, db.ForeignKey('words.id'), primary_key=True)
-    notification_type = db.Column(db.Enum(name='type'), nullable=False)
-    notification_time = db.Column(db.Enum(name='time'), nullable=False)
+
+    notification_type = db.Column(db.SmallInteger(), nullable=False)
+    notification_time = db.Column(db.SmallInteger(), nullable=False)
+
     last_update = db.Column(db.DateTime(), nullable=True)
 
     def __repr__(self):

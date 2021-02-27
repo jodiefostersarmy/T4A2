@@ -30,6 +30,7 @@ def seed_db():
 
     for i in range(5):                                                           # Do this 5 times
         user = User()                                                           # Create an user object from the User model
+        user.name = faker.name()                                                # assigns fake name for user object from faker module
         user.email = f"test{i+1}@test.com"                                      # Assign an email to the user object
         user.password = bcrypt.generate_password_hash("123456").decode("utf-8") # Assign ta hashed password to the user object
         user.mobile_number = faker.msisdn()
