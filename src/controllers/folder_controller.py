@@ -5,7 +5,7 @@ from main import db
 from sqlalchemy.orm import joinedload
 from flask import Blueprint, request, jsonify, abort
 
-words = Blueprint("words", __name__, url_prefix="/words")
+words = Blueprint("folders", __name__, url_prefix="/folders")
 
 @words.route("/", methods=["GET"])
 def word_index():

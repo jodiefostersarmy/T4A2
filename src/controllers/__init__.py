@@ -7,4 +7,5 @@ from controllers.word_controller import words
 registerable_controllers = [
     user,
     words,
+    folder
 ]
