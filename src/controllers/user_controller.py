@@ -1,41 +1,99 @@
-from models.User import User                                                 # Importing the User Model
-from schemas.UserSchema import user_schema                                   # Importing the User Schema
-from main import db                                                          # This is the db instance created by SQLAlchemy
-from main import bcrypt                                                      # Import the hasing package from main
-from flask_jwt_extended import create_access_token                           # Package for providing JWTs
-from datetime import timedelta                                               # Function to calculate the difference in time
-from flask import Blueprint, request, jsonify, abort                         # Import flask and various sub packages
+from models.User import User
+from schemas.UserSchema import users_schema, user_schema
+from main import db
+from main import bcrypt
+from flask_jwt_extended import create_access_token
+from datetime import timedelta
+from flask import Blueprint, request, jsonify, abort
 
-user = Blueprint('user', __name__, url_prefix="/user")                       # Creating the user blueprint, registered in __init__.py
+user = Blueprint('user', __name__, url_prefix="/user")
 
-@user.route("/register", methods=["POST"])                                   # Register route
-def user_register():
-    user_fields = user_schema.load(request.json)                             # Getting the fields from the User Schema
-    user = User.query.filter_by(email=user_fields["email"]).first()       # Query the user table with the email and return the first user
+@user.route("/", methods=["GET"])
+def all_users():
+    """Return all users""" 
+    users = User.query.all()
+    return jsonify(users_schema.dump(users))
     
-    if user:                                                                 # If a user is returned 
-        return abort(400, description="Email already in use")                # Return the error "Email already in use"
+    # Goal: Only return all users if_admin=True
+    # admin = User.query.filter_by(is_admin=user_fields["is_admin"]).first() 
+    # if admin:
+    #     return jsonify(users_schema.dump(users))
+    # else:
+    #     return abort(401, description="You are not authorized to make this request")
 
-    user = User()                                                            # Re-init user as a new instance of the User model
+@user.route("/<int:id>", methods=["GET"])
+def get_user(id):
+    """Return single user"""
+    user = User.query.get(id)
+    return jsonify(user_schema.dump(user))
 
-    user.email = user_fields["email"]                                        # Add email to the user
-    user.password = bcrypt.generate_password_hash(user_fields["password"]).decode("utf-8") # Hash the password and add it to the user
+@user.route("/<int:id>", methods=["DELETE"])
+# @jwt_required // Throw these in later when you've outlined whole backend
+# @verify_user
+def delete_user(id):
+    """Delete single user"""
+    # note: still need user_id verification for authorised deletion or is_admin
+    user = User.query.get(id)
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify(user_schema.dump(user))
 
-    db.session.add(user)                                                     # Add the user to the db session
-    db.session.commit()                                                      # Commit the session
+@user.route("/<int:id>", methods=["PUT", "PATCH"])  # when browser hits this endpoint
+def update_user(id):                                # it will run user update method
+    """Update single user"""                        # i want to update a single user
+    user_fields = user_schema.load(request.json)    # I will load all the attributes for the User model              
+    user = User.query.filter_by(id=id)              # I want to select the user with id = <int:id> from the URI
 
-    return jsonify(user_schema.dump(user))                                # Return the user that was just created
+    user.update(user_fields)                        # I want you to update the User account with fields input in the JSON body from insomnia
+    db.session.commit()                             # commit session to db with updated details
+    
+    # return jsonify(user_schema.dump(user))
+    return "Updated User"                           # Return if successful
 
 
-@user.route("/login", methods=["POST"])                                                             # Login route
+@user.route("/register", methods=["POST"])
+def user_register():
+    """Create user account"""
+    user_fields = user_schema.load(request.json)
+    email = User.query.filter_by(email=user_fields["email"]).first()
+    mobile = User.query.filter_by(mobile_number=user_fields["mobile_number"]).first() 
+    
+    if email:
+        return abort(400, description="Email already in use")
+    
+    if mobile:
+        return abort(400, description="Mobile already in use")
+
+    user = User()
+
+    user.name = user_fields["name"]
+    user.mobile_number = user_fields["mobile_number"]
+    user.join_date = user_fields["join_date"]
+    user.email = user_fields["email"]
+    user.password = bcrypt.generate_password_hash(user_fields["password"]).decode("utf-8")
+
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify(user_schema.dump(user))
+
+
+@user.route("/login", methods=["POST"])
 def user_login():
-    user_fields = user_schema.load(request.json)                                              # Getting the fields from the User Schema
-    user = User.query.filter_by(email=user_fields["email"]).first()                        # Query the user table with the email and return the first user
+    """Log in user with user details"""
+    user_fields = user_schema.load(request.json)
+    user = User.query.filter_by(email=user_fields["email"]).first()
 
-    if not user or not bcrypt.check_password_hash(user.password, user_fields["password"]): # If there is no user or the password is wrong
-        return abort(401, description="Incorrect username or password")                             # Return the error "Incorrect username or password"
+    if not user or not bcrypt.check_password_hash(user.password, user_fields["password"]):
+        return abort(401, description="Incorrect username or password")
 
-    expiry = timedelta(days=1)                                                                      # Time for the token to expire
-    access_token = create_access_token(identity=str(user.id), expires_delta=expiry)              # The access token, with the user id and the expiration date
+    expiry = timedelta(days=1)
+    access_token = create_access_token(identity=str(user.id), expires_delta=expiry)
 
-    return jsonify({ "token": access_token })                                                       # Return the token
+    return jsonify({ "token": access_token })
+
+
+# @user.route("/logout", methods=["GET"])
+# def user_logout():
+#     session.clear()
+#     return "Logged out"
