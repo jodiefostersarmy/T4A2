@@ -1,74 +1,81 @@
-from models.Word import Word                                           # Importing the Profile Model
-from models.User import User                                           # Importing the User Model
-from schemas.WordSchema import word_schema, words_schema      # Importing the Profile Schema
-from main import db                                                    # This is the db instance created by SQLAlchemy
-from sqlalchemy.orm import joinedload                                  # 
-from flask import Blueprint, request, jsonify, abort                   # Import flask and various sub packages
+from models.Word import Word
+from models.User import User
+from schemas.WordSchema import word_schema, words_schema
+from main import db
+from sqlalchemy.orm import joinedload
+from flask import Blueprint, request, jsonify, abort
 
-words = Blueprint("words", __name__, url_prefix="/words")      # Creating the profile blueprint 
+words = Blueprint("words", __name__, url_prefix="/words")
 
-@words.route("/", methods=["GET"])                                      # Route for word index
-def word_index():                                                       # This function will run when the route is matched
+@words.route("/", methods=["GET"])
+def word_index():
     words = Word.query.all()
-    return jsonify(words_schema.dump(words))                            # Returning all the profiles in json
+    return jsonify(words_schema.dump(words))
 
-# @words.route("/", methods=["POST"])                                 # Route for the profile create
-# @jwt_required                                                          # JWT token is required for this route
-# @verify_user                                                           # Auth service to make sure the correct user owns this profile
-# def word_create(user):                                              # This function will run when the route is matched
-
-#     if user.profile != []:                                             # If the user already has a profile
-#         return abort(400, description="User already has profile")      # Return the error "Email already in use"
-
-#     profile_fields = profile_schema.load(request.json)                 # Retrieving the fields from the request
-#     profile = Profile.query.filter_by(username=profile_fields["username"]).first() # Query the user table with the email and return the first user
-
-#     if profile:                                                        # If a user is returned 
-#         return abort(400, description="username already in use")       # Return the error "Email already in use"
-
-#     new_profile = Profile()                                            # Create a new profile object from the Profile model 
-#     new_profile.username = profile_fields["username"]                  # Add username to the new_profile 
-#     new_profile.firstname = profile_fields["firstname"]                # Add username to the new_profile 
-#     new_profile.lastname = profile_fields["lastname"]                  # Add username to the new_profile 
-#     new_profile.user_id = user.id                                      # Add username to the new_profile 
+@words.route("/", methods=["POST"])
+# @jwt_required
+def word_create():
+    """Create word as user"""
+    word_fields = word_schema.load(request.json)
     
-#     user.profile.append(new_profile)                                   # Add profile to the user
-#     db.session.commit()                                                # Commit the DB session
-      
-#     return jsonify(profile_schema.dump(new_profile))                   # Return the newly created profile
+    # word = Word.query.filter_by(username=user_fields["username"]).first()  // see line 32 & 33
 
-# @words.route("/<int:id>", methods=["GET"])                          # Route for the profile create
-# def profile_show(id):                                                  # Auth service to make sure the correct user owns this profile
-#     profile = Profile.query.get(id)                                    # Query the user table with the id then return that user
-#     return jsonify(profile_schema.dump(profile))                       # Returb the profile in JSON
+    # if not user:
+    #     return abort(401, description="Cannot save this word")
+
+    new_word = Word()                                           # create a new instance of the Word object
+    new_word.word_self = word_fields["word_self"]               # using schema loaded above, insert new value into "word_self" column 
+    new_word.definition = word_fields["definition"]             # using schema loaded above, insert new value into "definition" column 
+    new_word.pronunciation = word_fields["pronunciation"]       # using schema loaded above, insert new value into "pronunciation" column 
     
+    # new_word.user_id = user.id       // do not need this line until you have savedword controller up and running
+    # user.profile.append(new_profile) // as above, so below
 
-# @words.route("/<int:id>", methods=["PUT", "PATCH"])                 # Route for the profile create
-# @jwt_required                                                          # JWT token is required for this route
-# @verify_user                                                           # Auth service to make sure the correct user owns this profile
+    db.session.add(new_word)
+    db.session.commit()
+    return jsonify(word_schema.dump(new_word))
+
+@words.route("/<int:id>", methods=["GET"])
+def single_word(id):
+    """Return a single word"""
+    word = Word.query.get(id)
+    return jsonify(word_schema.dump(word))
+
+
+
+
+
+
+
+
+
+# below two routes may not be needed, but this may be an additional feature added later on.
+
+
+# @words.route("/<int:id>", methods=["DELETE"])
+# def word_delete(user, id):
+#     """Allow deletion of a word if user is_admin"""
+#     word = Word.query.filter_by(id=id, user_id=user.id).first()
+
+#     if not is_admin: 
+#         return abort(400, description="Unauthorized to delete this word")
+    
+#     db.session.delete(word)
+#     db.session.commit()
+#     return jsonify(word_schema.dump(word))
+
+
+
+# @words.route("/<int:id>", methods=["PUT", "PATCH"])
 # def profile_update(user, id):                             
-    
-#     profile_fields = profile_schema.load(request.json)                 # Retrieving the fields from the request
-#     profile = Profile.query.filter_by(id=id, user_id=user.id)          # Query the user table with the id and the user id then return the first user
-#     if not profile:                                                    # If there is no profile found
-#         return abort(401, description="Unauthorized to update this profile")  # Return this error
+#     """Update a word"""
+
+#     profile_fields = profile_schema.load(request.json)
+#     profile = Profile.query.filter_by(id=id, user_id=user.id)
+#     if not profile:
+#         return abort(401, description="Unauthorized to update this profile")
 
 #     print(profile.__dict__)
-#     profile.update(profile_fields)                                     # Update the fields with the data from the request
-#     db.session.commit()                                                # Commit the session to the db
-#     return jsonify(profile_schema.dump(profile[0]))                    # Return the recently committed profile
-
-
-# @words.route("/<int:id>", methods=["DELETE"])                       # Route for the profile create
-# @jwt_required        
-# @verify_user                                                           # Auth service to make sure the correct user owns this profile
-# def profile_delete(user, id):
-#     profile = Profile.query.filter_by(id=id, user_id=user.id).first()  # Query the user table with the id and the user id then return the first user
-#     # print(profile[0].__dict__)
-#     # return("bills")
-#     if not profile:                                                    # If there is any number other than 1
-#         return abort(400, description="Unauthorized to update this profile") # Return this error
-    
-#     db.session.delete(profile)
-#     db.session.commit()                                                # Commit the session to the db
-#     return jsonify(profile_schema.dump(profile))                       # Return the deleted profile
+#     profile.update(profile_fields)
+#     db.session.commit()
+#     return jsonify(profile_schema.dump(profile[0]))
