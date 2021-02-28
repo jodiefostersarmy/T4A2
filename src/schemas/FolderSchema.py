@@ -1,6 +1,7 @@
 from main import ma
 from models.Folder import Folder
 from schemas.UserSchema import UserSchema
+from marshmallow.validate import Length
 
 class FolderSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -8,10 +9,10 @@ class FolderSchema(ma.SQLAlchemyAutoSchema):
 
     title = ma.String(required=True, validate=Length(min=1, max=50))
     description = ma.String(required=False, validate=Length(max=120))
-    date_created = ma.DateTime(required=True)
-    image = ma.Integer(required=False)
-    user = ma.Nested(UserSchema)
+    date_created = ma.String(required=True)   # change this to datetime
+    image = ma.String()
+    # user = ma.Nested(UserSchema)
 
 
-reminder_schema = ReminderSchema()
-reminder_schema = ReminderSchema(many=True)
+folder_schema = FolderSchema()
+folders_schema = FolderSchema(many=True)

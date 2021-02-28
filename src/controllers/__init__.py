@@ -3,9 +3,10 @@
 
 from controllers.user_controller import user                 # Importing the user blueprint
 from controllers.word_controller import words
+from controllers.folder_controller import folders
 
 registerable_controllers = [
     user,
     words,
-    folder
+    folders
 ]
