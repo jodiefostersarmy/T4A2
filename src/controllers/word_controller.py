@@ -24,7 +24,7 @@ def word_create():
     #     return abort(401, description="Cannot save this word")
 
     new_word = Word()                                           # create a new instance of the Word object
-    new_word.word_self = word_fields["word_self"]               # using schema loaded above, insert new value into "word_self" column 
+    new_word.word = word_fields["word"]               # using schema loaded above, insert new value into "word_self" column 
     new_word.definition = word_fields["definition"]             # using schema loaded above, insert new value into "definition" column 
     new_word.pronunciation = word_fields["pronunciation"]       # using schema loaded above, insert new value into "pronunciation" column 
     
@@ -40,13 +40,6 @@ def single_word(id):
     """Return a single word"""
     word = Word.query.get(id)
     return jsonify(word_schema.dump(word))
-
-
-
-
-
-
-
 
 
 # below two routes may not be needed, but this may be an additional feature added later on.
@@ -66,16 +59,16 @@ def single_word(id):
 
 
 
-# @words.route("/<int:id>", methods=["PUT", "PATCH"])
-# def profile_update(user, id):                             
-#     """Update a word"""
+@words.route("/<int:id>", methods=["PUT", "PATCH"])
+def profile_update(user, id):                             
+    """Update a word"""
 
-#     profile_fields = profile_schema.load(request.json)
-#     profile = Profile.query.filter_by(id=id, user_id=user.id)
-#     if not profile:
-#         return abort(401, description="Unauthorized to update this profile")
+    profile_fields = profile_schema.load(request.json)
+    profile = Profile.query.filter_by(id=id, user_id=user.id)
+    if not profile:
+        return abort(401, description="Unauthorized to update this profile")
 
-#     print(profile.__dict__)
-#     profile.update(profile_fields)
-#     db.session.commit()
-#     return jsonify(profile_schema.dump(profile[0]))
+    print(profile.__dict__)
+    profile.update(profile_fields)
+    db.session.commit()
+    return jsonify(profile_schema.dump(profile[0]))
