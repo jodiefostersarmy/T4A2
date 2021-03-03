@@ -4,13 +4,12 @@ class SavedWord(db.Model):
     __tablename__= "saved_words"
 
     id = db.Column(db.Integer, primary_key=True)
+    
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     word_id = db.Column(db.Integer, db.ForeignKey("words.id"), nullable=False)
     
-    word = db.Column(db.String(), nullable=False, unique=True)
-    definition = db.Column(db.String(), nullable=False)
-    pronunciation = db.Column(db.String(), nullable=False)
-
+    date_added = db.Column(db.String())
+    notification = db.Column(db.Boolean())
 
 
     def __repr__(self):

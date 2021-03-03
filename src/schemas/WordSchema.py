@@ -7,7 +7,7 @@ class WordSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Word
 
-    word_self = ma.String(required=True, validate=Length(min=3))
+    word = ma.String(required=True, validate=Length(min=3))
     definition = ma.String(required=True, validate=Length(min=5))
     pronunciation = ma.String(required=True, validate=Length(min=1))
 

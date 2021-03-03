@@ -21,12 +21,15 @@ def drop_db():
 def seed_db():
     from models.User import User                          # Importing the User model
     from models.Word import Word                          # Importing the Profile model
+    from models.Folder import Folder
+    from models.SavedWord import SavedWord
     from main import bcrypt                                     # Hashing module for the passwords
     from faker import Faker                                     # Importing the faker module for fake data
     import random                                               # Importing random from the python standard library
 
     faker = Faker()
     users = []
+    words = []
 
     for i in range(5):                                                           # Do this 5 times
         user = User()                                                           # Create an user object from the User model
@@ -34,7 +37,7 @@ def seed_db():
         user.email = f"test{i+1}@test.com"                                      # Assign an email to the user object
         user.password = bcrypt.generate_password_hash("123456").decode("utf-8") # Assign ta hashed password to the user object
         user.mobile_number = faker.msisdn()
-        user.join_date = faker.date()
+        # user.join_date = faker.msisdn()
         db.session.add(user)                                                    # Add the user to the db session
         users.append(user)                                                      # Append the user to the users list
 
@@ -43,12 +46,36 @@ def seed_db():
     for i in range(5):
         word = Word()                                                     # Create a profile object from the Profile model                 
 
-        word.word_self = faker.word()                                   # Add a username to the profile object
+        word.word = faker.word()                                   # Add a username to the profile object
         word.definition = faker.words()                                  # Add a firstname to the profile object
         word.pronunciation = faker.last_name()                                    # Add a lastname to the profile object
         word.user_id = users[i].id                                           # Add a user_id to the profile object. This comes from real ids from the users list
 
+        words.append(word)
         db.session.add(word)                                                 # Add the profile to the session
 
     db.session.commit()                                                         # Commit the session to the database
+
+    for i in range(5):
+        savedWord = SavedWord()
+
+        savedWord.user_id = users[i].id
+        savedWord.word_id = words[i].id
+    
+        db.session.add(savedWord)
+    
+    db.session.commit()
+
+    for i in range(5):
+        folder = Folder()
+
+        folder.title = faker.word()
+        folder.description = faker.words()
+        folder.date_created = faker.msisdn()
+        folder.image = faker.msisdn()
+
+        db.session.add(folder)
+    
+    db.session.commit()
+
     print("Tables seeded")                                                      # Print a message to let the user know they 

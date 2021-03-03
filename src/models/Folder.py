@@ -13,8 +13,6 @@ class Folder(db.Model):
     description = db.Column(db.String(), nullable=False)
     date_created = db.Column(db.String(), nullable=False)
     image = db.Column(db.String(), nullable=True, unique=True)
-
-
     
     def __repr__(self):
         return f"<Profile {self.username}>"
