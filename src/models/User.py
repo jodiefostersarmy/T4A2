@@ -10,7 +10,7 @@ class User(db.Model):                                                           
     id = db.Column(db.Integer, primary_key=True)                                      # There is an id column and it is the primary key
     saved_word = db.relationship("SavedWord", backref="user")
     # reminder = db.relationship("Reminder", backref=backref("user_reminder", uselist=False))
-    # folder = db.relationship("Folder", backref=backref("user_folder", uselist=False))
+    folder = db.relationship("Folder", backref=backref("folderword", uselist=False))
 
     name = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False, unique=True)                       # Email column, string and it must be unique, not null

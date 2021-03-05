@@ -18,12 +18,6 @@ def all_users():
     users = User.query.all()
     return jsonify(users_schema.dump(users))
     
-    # Goal: Only return all users if_admin=True
-    # admin = User.query.filter_by(is_admin=user_fields["is_admin"]).first() 
-    # if admin:
-    #     return jsonify(users_schema.dump(users))
-    # else:
-    #     return abort(401, description="You are not authorized to make this request")
 
 @user.route("/<int:id>", methods=["GET"])
 def get_user(id):
@@ -32,7 +26,7 @@ def get_user(id):
     return jsonify(user_schema.dump(user))
 
 @user.route("/<int:id>", methods=["DELETE"])
-# @jwt_required // Throw these in later when you've outlined whole backend
+@jwt_required
 # @verify_user
 def delete_user(id):
     """Delete single user"""
@@ -51,7 +45,6 @@ def update_user(id):                                # it will run user update me
     user.update(user_fields)                        # I want you to update the User account with fields input in the JSON body from insomnia
     db.session.commit()                             # commit session to db with updated details
     
-    # return jsonify(user_schema.dump(user))
     return "Updated User"                           # Return if successful
 
 
@@ -98,26 +91,12 @@ def user_login():
     return jsonify({ "token": access_token })
 
 
-# @user.route("/logout", methods=["GET"])
-# def user_logout():
-#     session.clear()
-#     return "Logged out"
-
-
-
 @user.route("/<int:id>/words", methods=["GET"])
 def saved_words(id):
-    """Return words saved by user"""
+    """Return words saved by specific user"""
 
     saved_word = SavedWord.query.filter_by(user_id=id)
 
-    # test = SavedWord.query.join(saved_words).join(Word).filter((saved_words.c.word_id=words.id) & (saved_words.c.user_id=id)).all()
-    # test = SavedWord.query.filter_by(word_id=id)  # query for knowing which users own this word id
-
-    """
-    I want to get this SQL query into this SQL Alchemy Query
-    "SELECT word FROM saved_words,words WHERE saved_words.word_id=words.id AND user_id=3;"
-    """
     return jsonify(words_schema.dump(saved_word))
 
 
@@ -146,8 +125,6 @@ def save_user_word(id):
     new_save.date_added = 0
     new_save.notification = False
 
-
-    
     db.session.add(new_save)
     db.session.commit()
 

@@ -65,6 +65,7 @@ def profile_update(user, id):
 
     profile_fields = profile_schema.load(request.json)
     profile = Profile.query.filter_by(id=id, user_id=user.id)
+    
     if not profile:
         return abort(401, description="Unauthorized to update this profile")
 

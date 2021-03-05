@@ -1,8 +1,14 @@
 from main import db                                             # This is the db instance created by SQLAlchemy
 from flask import Blueprint                                     # Use blueprints instead of passing the app object around 
 
-db_commands = Blueprint("db-custom", __name__)                  # Creating the blueprint
-
+db_commands = Blueprint("db-custom", __name__)                  # Creates the blueprint
+"""
+A Blueprint is essentially a constructor, and is similar to a Flask application object, but is not an application.
+It is a set of operations which can be registered on an application, even multiple times.
+They provide separation at a Flask level, share app config, and can change an application object without being registered.
+However, you cannot unregister a blueprint once the application has been created, hence the reason why we drop the tables
+in testing if we add a new column or change the validations.
+"""
 
 @db_commands.cli.command("create")
 def create_db():
@@ -19,10 +25,13 @@ def drop_db():
 
 @db_commands.cli.command("seed")                                # this fronction will run when "flask db-custom seed" is run"
 def seed_db():
+    """Create arbitrary data for testing"""
+    
     from models.User import User                          # Importing the User model
     from models.Word import Word                          # Importing the Profile model
     from models.Folder import Folder
     from models.SavedWord import SavedWord
+    from models.FolderWord import FolderWord
     from main import bcrypt                                     # Hashing module for the passwords
     from faker import Faker                                     # Importing the faker module for fake data
     import random                                               # Importing random from the python standard library
@@ -30,6 +39,7 @@ def seed_db():
     faker = Faker()
     users = []
     words = []
+    folders = []
 
     for i in range(5):                                                           # Do this 5 times
         user = User()                                                           # Create an user object from the User model
@@ -74,7 +84,19 @@ def seed_db():
         folder.date_created = faker.msisdn()
         folder.image = faker.msisdn()
 
+        folders.append(folder)
+
         db.session.add(folder)
+    
+    db.session.commit()
+
+    for i in range(5):
+        folderword = FolderWord()
+
+        folderword.word_id = words[i].id
+        folderword.folder_id = folders[i].id
+
+        db.session.add(folderword)
     
     db.session.commit()
 

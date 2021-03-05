@@ -1,5 +1,9 @@
 from models.Folder import Folder
 from models.User import User
+from models.FolderWord import FolderWord
+from models.Word import Word
+from schemas.WordSchema import word_schema, words_schema
+from schemas.FolderedWordSchema import folderword_schema, folderwords_schema
 from schemas.FolderSchema import folder_schema, folders_schema
 from main import db
 from sqlalchemy.orm import joinedload
@@ -18,13 +22,16 @@ def folder_create():
     """Create folder as user"""
     folder_fields = folder_schema.load(request.json)
 
+    folder = Folder.query.filter_by(title=folder_fields["title"]).first()
+
+    if folder:
+        return abort(400, description='Folder title is already in use')
+
     new_folder = Folder()
     new_folder.title = folder_fields["title"]
     new_folder.description = folder_fields["description"]
     new_folder.date_created = folder_fields["date_created"]
     new_folder.image = folder_fields["image"]
-    # new_folder.user_id = user.id
-
 
     db.session.add(new_folder)
     db.session.commit()
@@ -33,9 +40,10 @@ def folder_create():
 
 @folders.route("/<int:id>", methods=["GET"])
 def single_folder(id):
-    """Return a single folder"""
-    folder = Folder.query.get(id)
-    return jsonify(folder_schema.dump(folder))
+    """Return a single folder with all words"""
+
+    folder_words = FolderWord.query.all()
+    return jsonify(words_schema.dump(folder_words))
 
 
 @folders.route("/<int:id>", methods=["PUT", "PATCH"])
