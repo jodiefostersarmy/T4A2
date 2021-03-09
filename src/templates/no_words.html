@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h3>You currently have an empty dictionary</h1>
+    <div>
+    {% for save in saved %}
+        <p>Sorry, you have no saved words!</p>
+    {% endfor %}
+</div>
+{% endblock %}}

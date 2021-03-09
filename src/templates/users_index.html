@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Users</h1>
+    {% for user in users %}
+        <div style="padding-top: 2%;">
+            =========
+            <h3>Name:{{user.name}}</h3>
+            <h4>Email: {{user.email}}</h4>
+            <h4>Joined: {{user.join_date}}</h4>
+            <h4>Is admin: {{user.is_admin}}</h4>
+            <a href="{{ url_for('user.saved_words', id=user.id) }}">User's saved words</a>
+        </div>
+    {% endfor %}
+{% endblock %}}

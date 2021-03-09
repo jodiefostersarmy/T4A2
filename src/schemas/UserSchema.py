@@ -12,7 +12,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):                              # Genera
     password = ma.String(required=True, validate=Length(min=6))
     mobile_number = ma.Integer(required=True)
     join_date = ma.Integer(required=False)                               # using INTEGER while testing, change to datetime at some point and also required=True
-    is_admin = ma.Boolean(required=True)
+    is_admin = ma.Boolean(required=False)
 
 user_schema = UserSchema()                                              # Schema for a single user
 users_schema = UserSchema(many=True)                                    # Schema for multiple users    

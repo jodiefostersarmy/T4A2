@@ -6,39 +6,54 @@ from models.SavedWord import SavedWord
 from schemas.SavedWordSchema import savedword_schema, savedwords_schema
 from main import db
 from main import bcrypt
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import timedelta
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, request, jsonify, abort, render_template, Response
+import json
+import requests
 
 user = Blueprint('user', __name__, url_prefix="/user")
 
 @user.route("/", methods=["GET"])
 def all_users():
     """Return all users"""
+    
     users = User.query.all()
-    return jsonify(users_schema.dump(users))
+
+    return render_template("users_index.html", users = users)
+    # return jsonify(users_schema.dump(users))
     
 
 @user.route("/<int:id>", methods=["GET"])
+# @jwt_required
 def get_user(id):
     """Return single user"""
     user = User.query.get(id)
-    return jsonify(user_schema.dump(user))
+    if user:
+        return render_template("account_details.html", user=user)   # we assign the variable we want to access for our html template to the SQLalchemy query we have just defined.
+    else:
+        return "This user does not exist!"          # turn this into an error page
+    # return jsonify(user_schema.dump(user))
+    
 
 @user.route("/<int:id>", methods=["DELETE"])
-@jwt_required
-# @verify_user
+# @jwt_required
 def delete_user(id):
     """Delete single user"""
-    # note: still need user_id verification for authorised deletion or is_admin
+
     user = User.query.get(id)
+    
     db.session.delete(user)
     db.session.commit()
-    return jsonify(user_schema.dump(user))
+
+    return "User deleted"
+
 
 @user.route("/<int:id>", methods=["PUT", "PATCH"])  # when browser hits this endpoint
+# @jwt_required
 def update_user(id):                                # it will run user update method
     """Update single user"""                        # i want to update a single user
+
     user_fields = user_schema.load(request.json)    # I will load all the attributes for the User model              
     user = User.query.filter_by(id=id)              # I want to select the user with id = <int:id> from the URI
 
@@ -48,66 +63,33 @@ def update_user(id):                                # it will run user update me
     return "Updated User"                           # Return if successful
 
 
-@user.route("/register", methods=["POST"])
-def user_register():
-    """Create user account"""
-    user_fields = user_schema.load(request.json)
-    email = User.query.filter_by(email=user_fields["email"]).first()
-    mobile = User.query.filter_by(mobile_number=user_fields["mobile_number"]).first() 
-    
-    if email:
-        return abort(400, description="Email already in use")
-    
-    if mobile:
-        return abort(400, description="Mobile already in use")
-
-    user = User()
-
-    user.name = user_fields["name"]
-    user.mobile_number = user_fields["mobile_number"]
-    # user.join_date = user_fields["join_date"]
-    user.email = user_fields["email"]
-    user.password = bcrypt.generate_password_hash(user_fields["password"]).decode("utf-8")
-
-    db.session.add(user)
-    db.session.commit()
-
-    return jsonify(user_schema.dump(user))
-
-
-@user.route("/login", methods=["POST"])
-def user_login():
-    """Log in user with user details"""
-
-    user_fields = user_schema.load(request.json)
-    user = User.query.filter_by(email=user_fields["email"]).first()
-
-    if not user or not bcrypt.check_password_hash(user.password, user_fields["password"]):
-        return abort(401, description="Incorrect username or password")
-
-    expiry = timedelta(days=1)
-    access_token = create_access_token(identity=str(user.id), expires_delta=expiry)
-
-    return jsonify({ "token": access_token })
-
-
 @user.route("/<int:id>/words", methods=["GET"])
+@jwt_required
 def saved_words(id):
     """Return words saved by specific user"""
 
+    user_jwt = get_jwt_identity()
+    user = User.query.get(user_jwt)
+
+    if user.id != id:
+        return abort(401, description="You are not authorized to view this database")
+
     saved_word = SavedWord.query.filter_by(user_id=id)
+    is_there_a_word = SavedWord.query.filter_by(user_id=id).first()
 
-    return jsonify(words_schema.dump(saved_word))
-
-
+    if not is_there_a_word:
+        return render_template("no_words.html")
+    else:
+        return render_template("user_words.html", saved = saved_word) 
 
 @user.route("/<int:id>/save", methods=["POST"])
+# @jwt_required
 def save_user_word(id):
     """Save word by user"""
 
     saveword_fields = savedword_schema.load(request.json)
 
-    save_word = SavedWord.query.filter_by(word_id=saveword_fields["word_id"], user_id=id).first()          # returns list of query results, first() extracts first element in list
+    save_word = SavedWord.query.filter_by(word_id=saveword_fields["word_id"], user_id=id).first()
     """
     word_id is equal to post input.
     user_id is equal to id in uri 
@@ -116,16 +98,35 @@ def save_user_word(id):
     :return: filtered query data
     :rtype: list
     """
-    if save_word:                                                                                               # checks saved words to see if save_word exists in db
-        return abort(400, description='Word is already saved')                                                  # if exist, throw error and return message
+    if save_word:                                                                        # checks saved words to see if save_word exists in db
+        return abort(400, description='Word is already saved')                           # if exist, throw error and return message
 
     new_save = SavedWord()
     new_save.user_id = id
     new_save.word_id = saveword_fields["word_id"]
     new_save.date_added = 0
-    new_save.notification = False
+    new_save.notification = saveword_fields["notification"]
 
     db.session.add(new_save)
     db.session.commit()
 
     return jsonify(savedword_schema.dump(new_save))
+
+@user.route("/<int:user_id>/words/<int:word_id>", methods=["DELETE"])
+# @jwt_required
+def delete_user_word(user_id, word_id):
+    "delete a user saved word"
+
+    saved_word = SavedWord.query.filter_by(user_id=user_id, word_id=word_id).first()
+
+    if saved_word:
+        db.session.delete(saved_word)
+        db.session.commit()
+        return "Word deleted"    
+    else:
+        return abort(400, description='This word does not exist in your saved words!')
+
+@user.route("/search/<string:word>", methods=["GET"])
+def search(word):
+    r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1').content
+    return r

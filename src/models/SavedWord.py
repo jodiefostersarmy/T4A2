@@ -5,7 +5,7 @@ class SavedWord(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     word_id = db.Column(db.Integer, db.ForeignKey("words.id"), nullable=False)
     
     date_added = db.Column(db.String())

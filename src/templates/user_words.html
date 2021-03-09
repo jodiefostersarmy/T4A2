@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>{{saved[0]["user"]["name"]}}'s Dictionary</h1>
+<a href="{{ url_for('user.get_user', id=saved[0]["user"]["id"]) }}">< Back</a>
+    <div>
+    {% for save in saved %}
+        ===
+        <h3>{{save["word"]}}</h3>
+        <h4>{{save["word"]["pronunciation"]}}</h4>
+        <h4>{{save["word"]["definition"]}}</h4>
+        <a href="">Delete Word</a>
+    {% endfor %}
+</div>
+{% endblock %}}

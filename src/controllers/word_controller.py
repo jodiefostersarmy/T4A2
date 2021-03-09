@@ -1,35 +1,38 @@
 from models.Word import Word
 from models.User import User
+from models.SavedWord import SavedWord
 from schemas.WordSchema import word_schema, words_schema
+from schemas.SavedWordSchema import savedword_schema, savedwords_schema
 from main import db
 from sqlalchemy.orm import joinedload
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, request, jsonify, abort, render_template
 
 words = Blueprint("words", __name__, url_prefix="/words")
 
 @words.route("/", methods=["GET"])
 def word_index():
     words = Word.query.all()
-    return jsonify(words_schema.dump(words))
+    # return jsonify(words_schema.dump(words))      # if we have a react or javascript front end, we would send this API to the front end
+    return render_template("words_index.html", words = words)     
+    # but, because we are using an integrated templating language like Jinja2, we want to use render_template function
+    # to generate output from the template file.
 
 @words.route("/", methods=["POST"])
-# @jwt_required
 def word_create():
     """Create word as user"""
     word_fields = word_schema.load(request.json)
+
+    word = Word.query.filter_by(word=word_fields["word"]).first()
+
+    if word:
+        return abort(400, description="Word already in database")
     
-    # word = Word.query.filter_by(username=user_fields["username"]).first()  // see line 32 & 33
-
-    # if not user:
-    #     return abort(401, description="Cannot save this word")
-
-    new_word = Word()                                           # create a new instance of the Word object
-    new_word.word = word_fields["word"]               # using schema loaded above, insert new value into "word_self" column 
+    new_word = Word()
+    new_word.word = word_fields["word"]                         # using schema loaded above, insert new value into "word_self" column 
     new_word.definition = word_fields["definition"]             # using schema loaded above, insert new value into "definition" column 
     new_word.pronunciation = word_fields["pronunciation"]       # using schema loaded above, insert new value into "pronunciation" column 
     
-    # new_word.user_id = user.id       // do not need this line until you have savedword controller up and running
-    # user.profile.append(new_profile) // as above, so below
+
 
     db.session.add(new_word)
     db.session.commit()
@@ -39,37 +42,23 @@ def word_create():
 def single_word(id):
     """Return a single word"""
     word = Word.query.get(id)
-    return jsonify(word_schema.dump(word))
+
+    if word:
+        return render_template("single_word.html", word = word)
+    else:
+        return "No such word"
+
+    # return jsonify(word_schema.dump(word))
 
 
-# below two routes may not be needed, but this may be an additional feature added later on.
+@words.route("/<int:id>", methods=["DELETE"])
+def word_delete(id):
+    """Allow deletion of a word if user is_admin"""
+    word = Word.query.filter_by(id=id).first()
 
+    if not word:
+        return abort(400, description="This word does not exist")
 
-# @words.route("/<int:id>", methods=["DELETE"])
-# def word_delete(user, id):
-#     """Allow deletion of a word if user is_admin"""
-#     word = Word.query.filter_by(id=id, user_id=user.id).first()
-
-#     if not is_admin: 
-#         return abort(400, description="Unauthorized to delete this word")
-    
-#     db.session.delete(word)
-#     db.session.commit()
-#     return jsonify(word_schema.dump(word))
-
-
-
-@words.route("/<int:id>", methods=["PUT", "PATCH"])
-def profile_update(user, id):                             
-    """Update a word"""
-
-    profile_fields = profile_schema.load(request.json)
-    profile = Profile.query.filter_by(id=id, user_id=user.id)
-    
-    if not profile:
-        return abort(401, description="Unauthorized to update this profile")
-
-    print(profile.__dict__)
-    profile.update(profile_fields)
+    db.session.delete(word)
     db.session.commit()
-    return jsonify(profile_schema.dump(profile[0]))
+    return "Word deleted"

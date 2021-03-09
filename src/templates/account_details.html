@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div>
+    <h3>Account Details</h3>
+    <hr>
+    <h4>{{user.name}}</h4>
+    <h4>{{user.email}}</h4>
+    <h4>{{user.mobile_number}}</h4>
+    
+    <p>You have been a user since....{{user.mobile_number}}</p>
+    <hr>
+</div>
+<div style="padding-bottom: 10px;">
+    <h4>Your folders and words</h4>
+    
+    <a href="">View folders</a>
+    <a href="{{user.id}}/words">Manage words</a>
+</div>
+{% endblock %}}

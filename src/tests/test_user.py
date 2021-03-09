@@ -1,6 +1,6 @@
 import unittest                                                         # This is the inbuilt python testing module
 from main import create_app, db                                         # This is the create_app function from the factory pattern and the DB from main
-from models.User import User                                      # The User module to be used to log in to retrieve a JWT
+from models.User import User                                            # The User module to be used to log in to retrieve a JWT
 
 class TestProfiles(unittest.TestCase):                                  # This is the Parent class that will test our Profile functionality.    
     @classmethod
@@ -46,4 +46,3 @@ class TestProfiles(unittest.TestCase):                                  # This i
         })
         data = response.get_json()                                        # Convert the response to data
         self.assertEqual(response.status_code, 200)                       # Checking if the response code is 200 you can make it a range 200-299 too
-        self.assertIsInstance(data['token'], str)                         # Checking the data data type of the token
