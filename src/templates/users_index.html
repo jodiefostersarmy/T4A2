@@ -5,7 +5,9 @@
     {% for user in users %}
         <div style="padding-top: 2%;">
             =========
+
             <h3>Name:{{user.name}}</h3>
+            <h4>User ID: {{user.id}}</h4>
             <h4>Email: {{user.email}}</h4>
             <h4>Joined: {{user.join_date}}</h4>
             <h4>Is admin: {{user.is_admin}}</h4>
