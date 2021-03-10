@@ -3,6 +3,7 @@ import os                                                           # Operating 
 class Config(object):
     JWT_SECRET_KEY = "Dev Key"                                      # Key used for development
     SQLALCHEMY_TRACK_MODIFICATIONS = False                          # Documentation says this should be false unless needed
+    SECRET_KEY = 'development'
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):                              # This is a function that will be used for all envs
@@ -21,7 +22,13 @@ class ProductionConfig(Config):
         value = os.environ.get("JWT_SECRET_KEY")
         if not value:
             raise ValueError("JWT Secret Key is not set")
+        return value
 
+    @property
+    def SECRET_KEY(self):
+        value = os.environ.get("SECRET_KEY")
+        if not value:
+            raise ValueError("Secret Key is not set")
         return value
 
 class TestingConfig(Config):

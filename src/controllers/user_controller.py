@@ -25,13 +25,11 @@ def all_users():
     
 
 @user.route("/<int:id>", methods=["GET"])
-@jwt_required
-@verify_user
-def get_user(id, user=None):
+def get_user(id):
     """Return single user"""
 
-    if user.id != id:    # note to educator: yes, I know this isn't dry, I should have turned this into a service. Will fix this post bootcamp.
-        return abort(401, description="You are not authorized to view this database")
+    # if user.id != id:    # note to educator: yes, I know this isn't dry, I should have turned this into a service. Will fix this post bootcamp.
+    #     return abort(401, description="You are not authorized to view this database")
 
     user = User.query.get(id)
     if user:
@@ -68,13 +66,13 @@ def update_user(id):                                # it will run user update me
 
 
 @user.route("/<int:id>/words", methods=["GET"])
-@jwt_required
-@verify_user
+# @jwt_required
+# @verify_user
 def saved_words(id, user=None):
     """Return words saved by specific user"""
 
-    if user.id != id:
-        return abort(401, description="You are not authorized to view this database")
+    # if user.id != id:
+    #     return abort(401, description="You are not authorized to view this database")
 
     saved_word = SavedWord.query.filter_by(user_id=id)
     is_there_a_word = SavedWord.query.filter_by(user_id=id).first()
@@ -82,7 +80,7 @@ def saved_words(id, user=None):
     if not is_there_a_word:
         return render_template("no_words.html")
     else:
-        return render_template("user_words.html", saved = saved_word) 
+        return render_template("user_words.html", saved=saved_word) 
 
 @user.route("/<int:id>/save", methods=["POST"])
 # @jwt_required
@@ -118,7 +116,6 @@ def save_user_word(id):
 # @jwt_required
 def delete_user_word(user_id, word_id):
     "delete a user saved word"
-
     saved_word = SavedWord.query.filter_by(user_id=user_id, word_id=word_id).first()
 
     if saved_word:
@@ -128,7 +125,11 @@ def delete_user_word(user_id, word_id):
     else:
         return abort(400, description='This word does not exist in your saved words!')
 
-@user.route("/search/<string:word>", methods=["GET"])
-def search(word):
-    r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1')
-    return render_template("search.html", request=r.json(), word_searched=word)
+@user.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "GET":
+        return render_template('search.html')
+    else:
+        word = request.form.get('word')
+        r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1')
+        return render_template("search_results.html", request=r.json(), word_searched=word)

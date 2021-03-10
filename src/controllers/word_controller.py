@@ -14,8 +14,7 @@ def word_index():
     words = Word.query.all()
     # return jsonify(words_schema.dump(words))      # if we have a react or javascript front end, we would send this API to the front end
     return render_template("words_index.html", words = words)     
-    # but, because we are using an integrated templating language like Jinja2, we want to use render_template function
-    # to generate output from the template file.
+
 
 @words.route("/", methods=["POST"])
 def word_create():
@@ -31,8 +30,6 @@ def word_create():
     new_word.word = word_fields["word"]                         # using schema loaded above, insert new value into "word_self" column 
     new_word.definition = word_fields["definition"]             # using schema loaded above, insert new value into "definition" column 
     new_word.pronunciation = word_fields["pronunciation"]       # using schema loaded above, insert new value into "pronunciation" column 
-    
-
 
     db.session.add(new_word)
     db.session.commit()
@@ -47,8 +44,6 @@ def single_word(id):
         return render_template("single_word.html", word = word)
     else:
         return "No such word"
-
-    # return jsonify(word_schema.dump(word))
 
 
 @words.route("/<int:id>", methods=["DELETE"])

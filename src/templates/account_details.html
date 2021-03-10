@@ -4,11 +4,10 @@
 <div>
     <h3>Account Details</h3>
     <hr>
-    <h4>{{user.name}}</h4>
-    <h4>{{user.email}}</h4>
-    <h4>{{user.mobile_number}}</h4>
+    <h4>Name: {{user.name.title()}}</h4>
+    <h4>Email: {{user.email}}</h4>
     
-    <p>You have been a user since....{{user.mobile_number}}</p>
+    <p>You have been a user since....{{user.join_date}}</p>
     <hr>
 </div>
 <div style="padding-bottom: 10px;">
