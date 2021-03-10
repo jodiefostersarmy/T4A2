@@ -45,8 +45,6 @@ def single_word(id):
     else:
         return "No such word"
 
-    # return jsonify(word_schema.dump(word))
-
 
 @words.route("/<int:id>", methods=["DELETE"])
 def word_delete(id):
