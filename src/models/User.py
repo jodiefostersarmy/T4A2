@@ -16,7 +16,7 @@ class User(db.Model):                                                           
     name = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False, unique=True)                       # Email column, string and it must be unique, not null
     password = db.Column(db.String(), nullable=False)                                 # The password is a string and must be present
-    mobile_number = db.Column(db.BigInteger(), nullable=False, unique=True)           # Mobile is an integer, cannot be null and must be unique
+    mobile_number = db.Column(db.BigInteger(), nullable=True)           # Mobile is an integer, cannot be null and must be unique
     join_date = db.Column(db.BigInteger())                                            # The join_date is a datetime and cannot be null
     is_admin = db.Column(db.Boolean(), nullable=True, default=False)
 
