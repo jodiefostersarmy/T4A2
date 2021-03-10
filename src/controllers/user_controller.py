@@ -27,14 +27,17 @@ def all_users():
 @user.route("/<int:id>", methods=["GET"])
 @jwt_required
 @verify_user
-def get_user(id):
+def get_user(id, user=None):
     """Return single user"""
+
+    if user.id != id:    # note to educator: yes, I know this isn't dry, I should have turned this into a service. Will fix this post bootcamp.
+        return abort(401, description="You are not authorized to view this database")
+
     user = User.query.get(id)
     if user:
         return render_template("account_details.html", user=user)   # we assign the variable we want to access for our html template to the SQLalchemy query we have just defined.
     else:
         return "This user does not exist!"          # turn this into an error page
-    # return jsonify(user_schema.dump(user))
     
 
 @user.route("/<int:id>", methods=["DELETE"])
