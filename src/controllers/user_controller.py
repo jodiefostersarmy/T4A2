@@ -128,5 +128,5 @@ def delete_user_word(user_id, word_id):
 
 @user.route("/search/<string:word>", methods=["GET"])
 def search(word):
-    r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1').content
-    return r
+    r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1')
+    return render_template("search.html", data=r.json())
