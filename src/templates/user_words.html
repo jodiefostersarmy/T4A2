@@ -9,7 +9,7 @@
         <h3>{{save["word"]}}</h3>
         <h4>{{save["word"]["pronunciation"]}}</h4>
         <h4>{{save["word"]["definition"]}}</h4>
-        <a href="">Delete Word</a>
+        <a href="{{ url_for('user.delete_user_word') }}">Delete Word</a>
     </div>
     {% endfor %}
 </div>
