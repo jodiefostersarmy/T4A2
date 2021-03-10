@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h3>You searched: "{{request[0]['meta']['stems'][0]}}"</h1>
+    <h4>{{request[0]['meta']['stems'][0]}}</h4>{{request[0]['fl']}}
+    <p>{{request[0]['hwi']['hw']}} | \ {{request[0]['hwi']['prs'][0]['mw']}}, {{request[0]['hwi']['prs'][1]['mw']}} \</p>
+    <p>{{request[0]['def'][0]['sseq'][0][0][1]['dt'][0][1].replace("{bc}",": ")}}</p> 
+{% endblock %}}

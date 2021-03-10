@@ -13,6 +13,6 @@ def verify_user(function):
         user = User.query.get(user_id)
         if not user:
             return abort(401, description="Invalid user")
-        return function(user, *args, **kwargs)
+        return function(user=user, *args, **kwargs)
 
     return wrapper

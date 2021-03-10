@@ -25,7 +25,8 @@ def all_users():
     
 
 @user.route("/<int:id>", methods=["GET"])
-# @jwt_required
+@jwt_required
+@verify_user
 def get_user(id):
     """Return single user"""
     user = User.query.get(id)
@@ -69,11 +70,8 @@ def update_user(id):                                # it will run user update me
 def saved_words(id, user=None):
     """Return words saved by specific user"""
 
-    # user_jwt = get_jwt_identity()
-    # user = User.query.get(user_jwt)
-
-    # if user.id != id:
-    #     return abort(401, description="You are not authorized to view this database")
+    if user.id != id:
+        return abort(401, description="You are not authorized to view this database")
 
     saved_word = SavedWord.query.filter_by(user_id=id)
     is_there_a_word = SavedWord.query.filter_by(user_id=id).first()
