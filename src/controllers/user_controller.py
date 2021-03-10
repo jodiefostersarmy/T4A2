@@ -4,13 +4,13 @@ from models.Word import Word
 from schemas.WordSchema import word_schema, words_schema
 from models.SavedWord import SavedWord
 from schemas.SavedWordSchema import savedword_schema, savedwords_schema
-from main import db
-from main import bcrypt
+from main import db, bcrypt
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import timedelta
 from flask import Blueprint, request, jsonify, abort, render_template, Response
 import json
 import requests
+from services.auth_service import verify_user
 
 user = Blueprint('user', __name__, url_prefix="/user")
 
@@ -25,15 +25,19 @@ def all_users():
     
 
 @user.route("/<int:id>", methods=["GET"])
-# @jwt_required
-def get_user(id):
+@jwt_required
+@verify_user
+def get_user(id, user=None):
     """Return single user"""
+
+    if user.id != id:    # note to educator: yes, I know this isn't dry, I should have turned this into a service. Will fix this post bootcamp.
+        return abort(401, description="You are not authorized to view this database")
+
     user = User.query.get(id)
     if user:
         return render_template("account_details.html", user=user)   # we assign the variable we want to access for our html template to the SQLalchemy query we have just defined.
     else:
         return "This user does not exist!"          # turn this into an error page
-    # return jsonify(user_schema.dump(user))
     
 
 @user.route("/<int:id>", methods=["DELETE"])
@@ -65,11 +69,9 @@ def update_user(id):                                # it will run user update me
 
 @user.route("/<int:id>/words", methods=["GET"])
 @jwt_required
-def saved_words(id):
+@verify_user
+def saved_words(id, user=None):
     """Return words saved by specific user"""
-
-    user_jwt = get_jwt_identity()
-    user = User.query.get(user_jwt)
 
     if user.id != id:
         return abort(401, description="You are not authorized to view this database")
@@ -129,4 +131,4 @@ def delete_user_word(user_id, word_id):
 @user.route("/search/<string:word>", methods=["GET"])
 def search(word):
     r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1')
-    return render_template("search.html", data=r.json())
+    return render_template("search.html", request=r.json(), word_searched=word)
