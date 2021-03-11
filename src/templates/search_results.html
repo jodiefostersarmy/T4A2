@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    
-    {% if request[0]['meta'] %}
+    {% if saved %}
+        <h3>You searched: "{{ word }}"</h3>
+        <h4>{{ saved.definition }}</h4>
+        <p>{{ saved.pronunciation }}</p>
+        
+    {% elif request[0]['meta'] %}
         <h3>You searched: "{{request[0]['meta']['stems'][0]}}"</h1>
         <h4>{{request[0]['meta']['stems'][0]}}</h4>{{request[0]['fl']}}
         {% if request[0]['hwi']['prs']|length > 1 %}

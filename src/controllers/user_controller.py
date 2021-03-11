@@ -5,7 +5,6 @@ from schemas.WordSchema import word_schema, words_schema
 from models.SavedWord import SavedWord
 from schemas.SavedWordSchema import savedword_schema, savedwords_schema
 from main import db, bcrypt
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import timedelta
 from flask import Blueprint, request, jsonify, abort, render_template, Response
 import json
@@ -39,7 +38,6 @@ def get_user(id):
     
 
 @user.route("/<int:id>", methods=["DELETE"])
-# @jwt_required
 def delete_user(id):
     """Delete single user"""
 
@@ -52,7 +50,6 @@ def delete_user(id):
 
 
 @user.route("/<int:id>", methods=["PUT", "PATCH"])  # when browser hits this endpoint
-# @jwt_required
 def update_user(id):                                # it will run user update method
     """Update single user"""                        # i want to update a single user
 
@@ -66,8 +63,6 @@ def update_user(id):                                # it will run user update me
 
 
 @user.route("/<int:id>/words", methods=["GET"])
-# @jwt_required
-# @verify_user
 def saved_words(id, user=None):
     """Return words saved by specific user"""
 
@@ -83,7 +78,6 @@ def saved_words(id, user=None):
         return render_template("user_words.html", saved=saved_word) 
 
 @user.route("/<int:id>/save", methods=["POST"])
-# @jwt_required
 def save_user_word(id):
     """Save word by user"""
 
@@ -113,7 +107,6 @@ def save_user_word(id):
     return jsonify(savedword_schema.dump(new_save))
 
 @user.route("/<int:user_id>/words/<int:word_id>", methods=["DELETE"])
-# @jwt_required
 def delete_user_word(user_id, word_id):
     "delete a user saved word"
     saved_word = SavedWord.query.filter_by(user_id=user_id, word_id=word_id).first()
@@ -131,5 +124,9 @@ def search():
         return render_template('search.html')
     else:
         word = request.form.get('word')
-        r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1')
-        return render_template("search_results.html", request=r.json(), word_searched=word)
+        saved_word = Word.query.filter_by(word=word).first()
+        if saved_word:
+            return render_template("search_results.html", saved=saved_word, word=word)
+        else:
+            r = requests.get(f'https://dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=2e5594a3-a9a1-48a8-a698-0cf76ece81e1')
+            return render_template("search_results.html", request=r.json(), word_searched=word)

@@ -4,6 +4,7 @@
     <div>
         <div style="padding-top:3%;">
             <form action="{{ url_for('user.search') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="text" name="word">
                 <button>Search</button>
             </form>

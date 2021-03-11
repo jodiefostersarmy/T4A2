@@ -59,16 +59,7 @@ def auth_login():
     print(current_user)
     login_user(user)
     print(current_user.id)
-    # expiry = timedelta(days=1)
-    # access_token = create_access_token(identity=str(user.id), expires_delta=expiry)
-    # return jsonify({ "token": access_token })
     return redirect(url_for('user.search'))
-
-
-# @auth.route("/users", methods=["GET"])
-# def user_index():
-#     users = User.query.all()
-#     return jsonify(users_schema.dump(users))
 
 @auth.route("/", methods=["GET"])
 def index():

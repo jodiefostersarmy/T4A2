@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -13,6 +14,7 @@ bcrypt = Bcrypt()
 jwt = JWTManager()
 migrate = Migrate()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 def create_app():
     from dotenv import load_dotenv
@@ -27,6 +29,7 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
     from models.User import get_user
     @login_manager.user_loader
