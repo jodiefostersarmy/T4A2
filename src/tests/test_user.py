@@ -57,3 +57,6 @@ class TestUsers(unittest.TestCase):
         self.assertIsInstance(data, list)
         # check value of response is a string
         self.assertIsInstance(data[0]['word'], str)
+
+
+
