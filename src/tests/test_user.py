@@ -1,48 +1,59 @@
-import unittest                                                         # This is the inbuilt python testing module
-from main import create_app, db                                         # This is the create_app function from the factory pattern and the DB from main
-from models.User import User                                            # The User module to be used to log in to retrieve a JWT
+import os
+import unittest
+from main import create_app, db
+from models.User import User
 
-class TestProfiles(unittest.TestCase):                                  # This is the Parent class that will test our Profile functionality.    
+class TestUsers(unittest.TestCase):
+
     @classmethod
-    def setUp(cls):                                                     # This method will run before each and every class
-        cls.app = create_app()                                          # Create a new instance of app
-        cls.app_context = cls.app.app_context()                         # Creating context for which the app is in. The tests run in parrallel therefore we need to keep track of which instance of app we are using
-        cls.app_context.push()                                          # Pushing context. Read the docs for more
-        cls.client = cls.app.test_client()                              # Adding the test client to the client
-        db.create_all()                                                 # Create all the 
+    def setUp(cls):
+        if os.environ.get("FLASK_ENV") != "testing":
+            raise EnvironmentError("FLASK_ENV not set to testing")
+        cls.app = create_app()
+        cls.app_context = cls.app.app_context()
+        cls.app_context.push()
+        cls.client = cls.app.test_client()
+        db.create_all()
         runner = cls.app.test_cli_runner()
-        runner.invoke(args=["db-custom", "seed"])                       # This seeds the db
+        runner.invoke(args=["db-custom", "seed"])
 
-    @classmethod                                                        # This method will run after each and every class
-    def tearDown(cls):                                                  # We want to delete all the data from the class tests
-        db.session.remove()                                             # Remove the session from the db
-        db.drop_all()                                                   # Drop all tables
-        cls.app_context.pop()                                           # Remove the context of the app
+    @classmethod
+    def tearDown(cls):
+        db.session.remove()
+        db.drop_all()
+        cls.app_context.pop()
 
+    def test_user_index(self):
+        "returns all users in the database"
+        response = self.client.get("/user/")
+        data = response.get_json()
 
-    def test_user_register(self):
-        response = self.client.post("/user/register",                   # Sending a post request to /user/register
-        json = {                                                        # Data needed to register a new user
-            "email": "test6@test.com",
-            "password": "123456"
-        })
-        self.assertEqual(response.status_code, 200)                     # Make sure the status codefrom the response is 200
-        data = response.get_json()                                      # Convert the data to JSON
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(data, list)
+        self.assertGreater(len(data), 3)
 
-        response = self.client.post("/user/login",                      # Sending a post request to /user/login
-        json = {                                                        # The json data needed to login ( From the new user )
-            "email": "test6@test.com",
-            "password": "123456"
-        })                    
-        data = response.get_json()                                      # jsonify the data
-        self.assertEqual(response.status_code, 200)                     # Checking if the response code is 200 you can make it a range 200-299 too
+    def test_single_user(self):
+        "return first user in database -> id=1"
+        user = User.query.first()
+        response = self.client.get(f"/user/{user.id}")
+        data = response.get_json()
 
+        # check status is OK
+        self.assertEqual(response.status_code, 200)
+        # check response data is dictionary
+        self.assertIsInstance(data, dict)
+        # check value of response is a string
+        self.assertIsInstance(data['name'], str)
 
-    def test_user_login(self):
-        response = self.client.post("/user/login",                       # Sending a post request to /user/login
-        json = {                                                         # The json data needed to login
-            "email": "test1@test.com",
-            "password": "123456"
-        })
-        data = response.get_json()                                        # Convert the response to data
-        self.assertEqual(response.status_code, 200)                       # Checking if the response code is 200 you can make it a range 200-299 too
+    def test_saved_word(self):
+        "return list of saved words"
+        user = User.query.first()
+        response = self.client.get(f"/user/{user.id}/words")
+        data = response.get_json()
+
+        #check status is ok
+        self.assertEqual(response.status_code, 200)
+        # check response data is a list
+        self.assertIsInstance(data, list)
+        # check value of response is a string
+        self.assertIsInstance(data[0]['word'], str)

@@ -12,8 +12,7 @@ words = Blueprint("words", __name__, url_prefix="/words")
 @words.route("/", methods=["GET"])
 def word_index():
     words = Word.query.all()
-    # return jsonify(words_schema.dump(words))      # if we have a react or javascript front end, we would send this API to the front end
-    return render_template("words_index.html", words = words)     
+    return jsonify(words_schema.dump(words))
 
 
 @words.route("/", methods=["POST"])

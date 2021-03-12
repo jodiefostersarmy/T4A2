@@ -6,15 +6,15 @@ class Config(object):
     SECRET_KEY = 'development'
 
     @property
-    def SQLALCHEMY_DATABASE_URI(self):                              # This is a function that will be used for all envs
-        value = os.environ.get("DB_URI")                            # Retrieve the DB_URI from the .env file to connect to DB
+    def SQLALCHEMY_DATABASE_URI(self):
+        value = os.environ.get("DB_URI")
         if not value:
-            raise ValueError("SQLALCHEMY_DATABASE_URI is not set")  # Raise error if it is not set
-        return value    
+            raise ValueError("SQLALCHEMY_DATABASE_URI is not set")
+        return value   
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    
+     
 
 class ProductionConfig(Config):
     @property
@@ -33,6 +33,12 @@ class ProductionConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+    @property
+    def SQLALCHEMY_DATABASE_URI(self):
+        value = os.environ.get("DB_URI_TEST")
+        if not value:
+            raise ValueError("SQLALCHEMY_DATABASE_URI_TEST is not set")
+        return value   
 
 environment = os.environ.get("FLASK_ENV")
 

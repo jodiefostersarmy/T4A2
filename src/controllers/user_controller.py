@@ -16,25 +16,20 @@ user = Blueprint('user', __name__, url_prefix="/user")
 @user.route("/", methods=["GET"])
 def all_users():
     """Return all users"""
-    
-    users = User.query.all()
 
-    return render_template("users_index.html", users = users)
-    # return jsonify(users_schema.dump(users))
+    users = User.query.all()
+    return jsonify(users_schema.dump(users))
     
 
 @user.route("/<int:id>", methods=["GET"])
 def get_user(id):
     """Return single user"""
 
-    # if user.id != id:    # note to educator: yes, I know this isn't dry, I should have turned this into a service. Will fix this post bootcamp.
-    #     return abort(401, description="You are not authorized to view this database")
-
     user = User.query.get(id)
     if user:
-        return render_template("account_details.html", user=user)   # we assign the variable we want to access for our html template to the SQLalchemy query we have just defined.
+        return jsonify(user_schema.dump(user))
     else:
-        return "This user does not exist!"          # turn this into an error page
+        return "This user does not exist!"
     
 
 @user.route("/<int:id>", methods=["DELETE"])
@@ -73,9 +68,9 @@ def saved_words(id, user=None):
     is_there_a_word = SavedWord.query.filter_by(user_id=id).first()
 
     if not is_there_a_word:
-        return render_template("no_words.html")
+        return abort(404, description="no words")
     else:
-        return render_template("user_words.html", saved=saved_word) 
+        return jsonify(words_schema.dump(saved_word))
 
 @user.route("/<int:id>/save", methods=["POST"])
 def save_user_word(id):
